@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Test Site</title>
+    <style>
+        :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;line-height:1.4;color:#222}
+        body{margin:0;display:grid;place-items:center;min-height:100vh;background:linear-gradient(180deg,#f6fbff,#eef6ff)}
+        .card{width:min(880px,92vw);background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(20,40,80,0.08);padding:28px}
+        header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+        h1{margin:0;font-size:1.25rem}
+        p{margin:.75rem 0;color:#444}
+        .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+        button{background:#0366d6;color:#fff;border:0;padding:.5rem .9rem;border-radius:8px;cursor:pointer;font-weight:600}
+        button.secondary{background:#e6eefb;color:#0366d6}
+        footer{margin-top:16px;font-size:.9rem;color:#666}
+        pre{background:#f5f8ff;padding:12px;border-radius:8px;overflow:auto}
+    </style>
+</head>
+<body>
+    <main class="card" role="main">
+        <header>
+            <h1>Test Site</h1>
+            <div class="controls">
+                <button id="countBtn">Click me</button>
+                <button id="resetBtn" class="secondary">Reset</button>
+            </div>
+        </header>
+
+        <p>This is a simple test page for development. Use it to verify your local server, layout, and scripts.</p>
+
+        <section aria-live="polite">
+            <p id="status">Clicked 0 times.</p>
+            <pre id="info">Location: <span id="loc">unknown</span>
+User agent: <span id="ua">unknown</span></pre>
+        </section>
+
+        <footer>
+            <small>Page generated locally. Resize the window to test responsiveness.</small>
+        </footer>
+    </main>
+
+    <script>
+        // Basic interactivity for testing
+        const countBtn = document.getElementById('countBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const status = document.getElementById('status');
+        const loc = document.getElementById('loc');
+        const ua = document.getElementById('ua');
+
+        let clicks = 0;
+        countBtn.addEventListener('click', () => {
+            clicks++;
+            status.textContent = `Clicked ${clicks} time${clicks === 1 ? '' : 's'}.`;
+        });
+
+        resetBtn.addEventListener('click', () => {
+            clicks = 0;
+            status.textContent = 'Clicked 0 times.';
+        });
+
+        // Populate simple diagnostics
+        loc.textContent = window.location.href;
+        ua.textContent = navigator.userAgent;
+    </script>
+</body>
+</html>
