@@ -1,0 +1,41 @@
+name: CI-CD
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke test
+        run: bash cicd/tests/smoke.sh
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/linux
+            git fetch --all
+            git reset --hard origin/main
+
+            # kirjoita cicd/.env aina Secrets-arvoilla (ei koskaan repoon)
+            cat > cicd/.env <<EOT
+DB_NAME=${{ secrets.DB_NAME }}
+DB_USER=${{ secrets.DB_USER }}
+DB_PASS=${{ secrets.DB_PASS }}
+DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
+EOT
+
+            cd cicd
+            sudo docker compose up -d --build
+            sudo docker compose ps
