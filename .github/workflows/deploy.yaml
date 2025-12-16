@@ -28,7 +28,6 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
-            # kirjoita cicd/.env aina Secrets-arvoilla (ei koskaan repoon)
             cat > cicd/.env <<EOT
 DB_NAME=${{ secrets.DB_NAME }}
 DB_USER=${{ secrets.DB_USER }}
