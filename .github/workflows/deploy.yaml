@@ -28,12 +28,11 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
-            cat > cicd/.env <<EOT
-DB_NAME=${{ secrets.DB_NAME }}
-DB_USER=${{ secrets.DB_USER }}
-DB_PASS=${{ secrets.DB_PASS }}
-DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
-EOT
+            # kirjoita cicd/.env aina Secrets-arvoilla (ei koskaan repoon)
+            printf "DB_NAME=%s\n" "${{ secrets.DB_NAME }}" > cicd/.env
+            printf "DB_USER=%s\n" "${{ secrets.DB_USER }}" >> cicd/.env
+            printf "DB_PASS=%s\n" "${{ secrets.DB_PASS }}" >> cicd/.env
+            printf "DB_ROOT_PASS=%s\n" "${{ secrets.DB_ROOT_PASS }}" >> cicd/.env
 
             cd cicd
             sudo docker compose up -d --build
